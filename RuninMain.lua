@@ -9,6 +9,9 @@ local UICorner_3 = Instance.new("UICorner")
 local Button3 = Instance.new("TextButton")
 local UICorner_4 = Instance.new("UICorner")
 
+-- สร้าง TweenService
+local TweenService = game:GetService("TweenService")
+
 RUNINXHUB999.Name = "RUNINXHUB999"
 RUNINXHUB999.Parent = game.CoreGui
 RUNINXHUB999.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
@@ -52,7 +55,7 @@ Button1.Text = "Copy CFrame"
 Button1.TextColor3 = Color3.fromRGB(255, 255, 255)
 Button1.TextSize = 23.000
 Button1.MouseButton1Click:Connect(function()
-	setclipboard(tostring(game.Players.LocalPlayer.Character.HumanoldRootPart.Position))
+	setclipboard(tostring(game.Players.LocalPlayer.Character.HumanoidRootPart.Position))
 end)
 UICorner_2.CornerRadius = UDim.new(0, 20)
 UICorner_2.Parent = Button1
@@ -93,3 +96,87 @@ end)
 
 UICorner_4.CornerRadius = UDim.new(0, 20)
 UICorner_4.Parent = Button3
+local function MakeDraggable(frame)
+	local dragToggle = nil
+	local dragSpeed = 0.25
+	local dragStart = nil
+	local startPos = nil
+	
+	local function updateInput(input)
+		local delta = input.Position - dragStart
+		local position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X,
+			startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+		frame.Position = position
+	end
+	
+	frame.InputBegan:Connect(function(input)
+		if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
+			dragToggle = true
+			dragStart = input.Position
+			startPos = frame.Position
+			
+			input.Changed:Connect(function()
+				if input.UserInputState == Enum.UserInputState.End then
+					dragToggle = false
+				end
+			end)
+		end
+	end)
+	
+	frame.InputChanged:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+			dragInput = input
+		end
+	end)
+	
+	game:GetService("UserInputService").InputChanged:Connect(function(input)
+		if input == dragInput and dragToggle then
+			updateInput(input)
+		end
+	end)
+end
+local function ShowUI()
+	MainFrame.Position = UDim2.new(-0.2, 0, 0.5, 0)
+	MainFrame.Visible = true
+	local tweenInfo = TweenInfo.new(
+		0.5,
+		Enum.EasingStyle.Quad,
+		Enum.EasingDirection.Out,
+		0,
+		false,
+		0
+	)
+	local tween = TweenService:Create(MainFrame, tweenInfo, {
+		Position = UDim2.new(0.114496469, 0, 0.561952472, 0)
+	})
+	tween:Play()
+end
+local function AddButtonHoverEffects(button)
+	local originalSize = button.Size
+	local hoverSize = UDim2.new(
+		originalSize.X.Scale * 1.05,
+		originalSize.X.Offset * 1.05,
+		originalSize.Y.Scale * 1.05,
+		originalSize.Y.Offset * 1.05
+	)
+	
+	local tweenInfo = TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+	
+	button.MouseEnter:Connect(function()
+		local tween = TweenService:Create(button, tweenInfo, {Size = hoverSize})
+		tween:Play()
+	end)
+	
+	button.MouseLeave:Connect(function()
+		local tween = TweenService:Create(button, tweenInfo, {Size = originalSize})
+		tween:Play()
+	end)
+end
+MakeDraggable(MainFrame)
+ShowUI()
+AddButtonHoverEffects(Button1)
+AddButtonH�overEffects(Button2)
+AddButtonHoverEffects(Button3)
+Button1.MouseButton1Click:Connect(function()
+	setclipboard(tostring(game.Players.LocalPlayer.Character.HumanoidRootPart.Position))
+end)
