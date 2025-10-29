@@ -73,7 +73,7 @@ Button2.Text = "DEX"
 Button2.TextColor3 = Color3.fromRGB(255, 255, 255)
 Button2.TextSize = 23.000
 Button2.MouseButton1Click:Connect(function()
-	loadstring(game:HttpGet("https://raw.githubusercontent.com/peyton2465/Dex/master/out.lua"))()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/infyiff/backup/main/dex.lua"))()
 end)
 UICorner_3.CornerRadius = UDim.new(0, 20)
 UICorner_3.Parent = Button2
@@ -177,3 +177,4 @@ ShowUI()
 Button1.MouseButton1Click:Connect(function()
 	setclipboard(tostring(game.Players.LocalPlayer.Character.HumanoidRootPart.Position))
 end)
+
